@@ -14,11 +14,15 @@ const dogQuery = gql`
 `;
 
 const DogComponent = graphql(dogQuery)(props => {
-  return !props.data.dogs ? (
-    <Text>Loading...</Text>
-  ) : (
-    <Text>{props.data.dogs[0].name}</Text>
-  );
+  const { error, dogs } = props.data;
+  if (error) {
+    return <Text>{error}</Text>;
+  }
+  if (dogs) {
+    return <Text>{dogs[0].name}</Text>;
+  }
+
+  return <Text>Loading...</Text>;
 });
 
 const client = new ApolloClient({
